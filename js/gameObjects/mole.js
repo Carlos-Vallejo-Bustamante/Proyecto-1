@@ -1,5 +1,5 @@
 class Mole extends gameObject {
-    constructor(x, y, hp) {
-        super(x, y, hp);
+    constructor({ position = { x: 0, y: 0 }, size = { width: 0, height: 0 }, hp, img, frequency }) {
+        super({ position, size, hp, img, frequency });
     }
 }

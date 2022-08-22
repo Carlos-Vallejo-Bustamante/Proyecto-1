@@ -1,3 +1,8 @@
+const canvas = document.querySelector('canvas');
+canvas.width = 500;
+canvas.height = 500;
+const context = canvas.getContext('2d');
+
 window.onload = () => {
     start();
 }
@@ -10,10 +15,7 @@ function start() {
     const game = new Game(player, moles);
 
     // Canvas cosas
-    const canvas = document.querySelector('canvas');
-    canvas.width = 500;
-    canvas.height = 500;
-    const context = canvas.getContext('2d');
+
     context.fillStyle = 'blue';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
