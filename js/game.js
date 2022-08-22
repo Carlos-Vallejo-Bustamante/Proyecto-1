@@ -11,6 +11,11 @@ const Game = {
     player: undefined,
     obstacles: [],
 
+    keys: {
+        keyLeftPressed: false,
+        keyRightPressed: false
+    },
+
     init() {
         this.canvas = document.querySelector("#canvas");
         this.context = this.canvas.getContext('2d');
@@ -33,6 +38,8 @@ const Game = {
 
         this.intervaId = setInterval(() => {
 
+            if (this.keys.keyLeftPressed) this.player.moveLeft()
+            if (this.keys.keyRightPressed) this.player.moveRigth()
             this.clearAll()
             this.drawAll()
 
@@ -56,12 +63,25 @@ const Game = {
         document.addEventListener('keydown', e => {
             switch (e.key) {
                 case 'ArrowLeft': // left arrow
-                    this.player.moveLeft();
+                    this.keys.keyLeftPressed = true;
                     break;
                 case 'ArrowRight': // right arrow
-                    this.player.moveRigth();
+                    this.keys.keyRightPressed = true;
                     break;
             }
+            // console.log(e.key + 'DOWN')
+        });
+
+        document.addEventListener('keyup', e => {
+            switch (e.key) {
+                case 'ArrowLeft': // left arrow
+                    this.keys.keyLeftPressed = false;
+                    break;
+                case 'ArrowRight': // right arrow
+                    this.keys.keyRightPressed = false;
+                    break;
+            }
+            // console.log(e.key + 'UP')
         });
     },
 
