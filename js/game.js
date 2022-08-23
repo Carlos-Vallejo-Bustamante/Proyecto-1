@@ -48,8 +48,12 @@ const Game = {
                 }
             }
 
+            this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
+
             this.clearAll()
             this.drawAll()
+
+            this.generateObstacles()
 
 
         }, 1000 / this.fps);
@@ -59,14 +63,22 @@ const Game = {
     generateAll() {
         this.background = new Background(this.context, this.width, this.height);
         this.player = new Player(this.context, 10, 500, 0, 0);
-        this.obstacles = new Obstacles(this.context, 900, 500, 250, 250)
+        // this.obstacles = new Obstacles(this.context, this.width - 1, 500, 250, 250)
     },
 
     drawAll() {
         // console.log('LLEGO')
         this.background.draw();
         this.player.draw();
-        this.obstacles.draw()
+        this.obstacles.forEach(el => {
+            el.draw()
+        });
+    },
+
+    generateObstacles() {
+        if (this.framesCounter % 90 === 0) {
+            this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(500, 400), this.player.height))
+        }
     },
 
     movePlayer() {
@@ -103,6 +115,12 @@ const Game = {
 
     clearAll() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    },
+
+    getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
 
