@@ -5,6 +5,9 @@ const Game = {
     height: undefined,
     intervaId: undefined,
     fps: 60,
+    time: document.querySelector('.score'),
+    // counter: 0,
+    // secs: 0, 
     framesCounter: 0,
 
     background: undefined,
@@ -38,9 +41,9 @@ const Game = {
         this.generateAll()
         this.movePlayer()
 
-
         this.intervaId = setInterval(() => {
-
+            // this.counter++
+            // if (this.counter % 60 === 0) this.secs++
             if (this.keys.keyLeftPressed) this.player.moveLeft()
             if (this.keys.keyRightPressed) this.player.moveRigth()
             if (this.keys.keyJumpPressed) {
@@ -49,16 +52,20 @@ const Game = {
                     this.keys.keyJumpPressed = false
                 }
             }
+
+            this.obstacles.forEach(o => {
+                this.checkCollisionObstacles(o);
+            });
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
-            if (this.platform.isCollision(this.player)) {
-                this.player.velY = 0;
-                console.log("AQUI");
-            }
+
             this.clearAll()
             this.drawAll()
 
             this.generateObstacles()
+            this.checkCollision()
 
+            // chocado = false;
+            // if (!chocado && collision) quitarVida y chocaado = true
 
         }, 1000 / this.fps);
 
@@ -66,15 +73,26 @@ const Game = {
 
     generateAll() {
         this.background = new Background(this.context, this.width, this.height);
-        this.player = new Player(this.context, 10, 500, 0, 0);
-        this.obstacles = new Obstacles(this.context, 900, 500, 250, 250)
+        this.player = new Player(this.context, 10, 500, 100, 100)
+        // this.player = new Player(this.context, 10, 500, 100, 100);
+        // this.obstacles = new Obstacles(this.context, this.width - 1, 500, 250, 250)
+        this.platform = new Platform(this.context, 200, 400, 200, 50);
     },
 
     drawAll() {
-        // console.log('LLEGO')
         this.background.draw();
         this.player.draw();
-        this.obstacles.draw()
+        this.platform.draw();
+        this.obstacles.forEach(el => {
+            el.draw()
+        });
+
+    },
+
+    generateObstacles() {
+        if (this.framesCounter % 90 === 0) {
+            this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(500, 250), 60, 60))
+        }
     },
 
     movePlayer() {
@@ -90,7 +108,6 @@ const Game = {
                     this.keys.keyJumpPressed = true
                     break
             }
-            // console.log(e.key + 'DOWN')
         });
 
         document.addEventListener('keyup', e => {
@@ -105,7 +122,6 @@ const Game = {
                     this.keys.keyJumpPressed = false
                     break
             }
-            // console.log(e.key + 'UP')
         });
     },
 
@@ -117,7 +133,25 @@ const Game = {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1) + min);
-    }
+    },
 
+    checkCollision() {
+        if (this.player.y + this.player.height <= this.platform.y
+            && this.player.y + this.player.height + this.player.velY >= this.platform.y
+            && this.player.x + this.player.width > this.platform.x
+            && this.player.x < this.platform.x + this.platform.width) {
+            this.player.velY = 0
+        }
+
+    },
+
+    checkCollisionObstacles(obstacle) {
+        if (this.player.x < obstacle.x + obstacle.width &&
+            this.player.x + this.player.width > obstacle.x &&
+            this.player.y < obstacle.y + obstacle.height &&
+            this.player.y + this.player.height > obstacle.y) {
+            console.log("Choque");
+        }
+    }
 
 }

@@ -1,10 +1,10 @@
 class Player {
-    constructor(context, x, y, hp, score, width, height) {
+    constructor(context, x, y, width, height) {
         this.context = context
         this.x = x
         this.y = y
-        this.hp = hp
-        this.score = score
+        // this.hp = hp
+        // this.score = score
         this.width = width
         this.height = height
         this.posY0 = 500
@@ -20,7 +20,8 @@ class Player {
     draw() {
 
         // this.sonic.addEventListener("load", () => {
-        this.context.drawImage(this.sonic, this.x, this.y, 100, 100)
+        this.context.fillRect(this.x, this.y, this.width, this.height)
+        // this.context.drawImage(this.sonic, this.x, this.y, this.width, this.height)
         this.gravedad()
         // });
 
@@ -43,21 +44,19 @@ class Player {
 
     jump() {
         if (this.y === 500) {
-            this.y -= 50
+            this.y -= 100
             this.velY -= 10
         }
 
     }
 
-    cosa() {
-        this.velY = 0;
-    }
 
     gravedad() {
         if (this.y < this.posY0) {
             this.y += this.velY;
             this.velY += this.gravity;
-        } else {
+        }
+        else {
             this.y = this.posY0;
             this.velY = 1;
         }

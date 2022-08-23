@@ -3,11 +3,20 @@
     padding: 0;
 }
 
+body {
+    overflow: hidden;
+    position: relative;
+}
+
 #canvas {
     margin: 0;
     padding: 0;
+    /* position: absolute; */
 }
 
-body {
-    overflow: hidden;
+.score {
+    position: absolute;
+    margin-left: 50px;
+    margin-top: 50px;
+
 }
