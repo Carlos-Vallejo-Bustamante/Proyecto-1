@@ -10,6 +10,7 @@ const Game = {
     background: undefined,
     player: undefined,
     obstacles: [],
+    platform: undefined,
 
     keys: {
         keyLeftPressed: false,
@@ -37,6 +38,7 @@ const Game = {
         this.generateAll()
         this.movePlayer()
 
+
         this.intervaId = setInterval(() => {
 
             if (this.keys.keyLeftPressed) this.player.moveLeft()
@@ -48,6 +50,10 @@ const Game = {
                 }
             }
 
+            if (this.platform.isCollision(this.player)) {
+                this.player.velY = 0;
+                console.log("AQUI");
+            }
             this.clearAll()
             this.drawAll()
 
@@ -60,6 +66,7 @@ const Game = {
         this.background = new Background(this.context, this.width, this.height);
         this.player = new Player(this.context, 10, 500, 0, 0);
         this.obstacles = new Obstacles(this.context, 900, 500, 250, 250)
+        this.platform = new Platform(this.context, 300, 500);
     },
 
     drawAll() {
@@ -67,6 +74,7 @@ const Game = {
         this.background.draw();
         this.player.draw();
         this.obstacles.draw()
+        this.platform.draw();
     },
 
     movePlayer() {
