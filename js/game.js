@@ -9,6 +9,7 @@ const Game = {
     // counter: 0,
     // secs: 0, 
     framesCounter: 0,
+    paralax: 10,
 
     background: undefined,
     player: undefined,
@@ -72,7 +73,7 @@ const Game = {
     },
 
     generateAll() {
-        this.background = new Background(this.context, this.width, this.height);
+        this.background = new Background(this.context, this.width, this.height, this.paralax);
         this.player = new Player(this.context, 10, 500, 100, 100)
         // this.player = new Player(this.context, 10, 500, 100, 100);
         // this.obstacles = new Obstacles(this.context, this.width - 1, 500, 250, 250)
@@ -80,13 +81,18 @@ const Game = {
     },
 
     drawAll() {
+        if (this.keys.keyRightPressed) {
+            this.background.posX -= 40;
+        }
         this.background.draw();
         this.player.draw();
         this.platform.draw();
         this.obstacles.forEach(el => {
+            if (this.keys.keyRightPressed) {
+                el.x -= 40;
+            }
             el.draw()
         });
-
     },
 
     generateObstacles() {

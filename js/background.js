@@ -1,5 +1,5 @@
 class Background {
-    constructor(context, w, h) {
+    constructor(context, w, h, parallax) {
         this.context = context
         this.width = w
         this.height = h
@@ -28,6 +28,6 @@ class Background {
         if (this.posX <= -this.width) {
             this.posX = 0;
         }
-        this.posX -= this.velX;
+        this.posX -= 0;
     }
 }
