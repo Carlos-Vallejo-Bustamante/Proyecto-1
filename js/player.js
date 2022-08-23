@@ -49,6 +49,10 @@ class Player {
 
     }
 
+    cosa() {
+        this.velY = 0;
+    }
+
     gravedad() {
         if (this.y < this.posY0) {
             this.y += this.velY;

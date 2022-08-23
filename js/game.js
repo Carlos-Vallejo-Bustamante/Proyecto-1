@@ -10,6 +10,7 @@ const Game = {
     background: undefined,
     player: undefined,
     obstacles: [],
+    platform: undefined,
 
     keys: {
         keyLeftPressed: false,
@@ -37,6 +38,7 @@ const Game = {
         this.generateAll()
         this.movePlayer()
 
+
         this.intervaId = setInterval(() => {
 
             if (this.keys.keyLeftPressed) this.player.moveLeft()
@@ -47,9 +49,11 @@ const Game = {
                     this.keys.keyJumpPressed = false
                 }
             }
-
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
-
+            if (this.platform.isCollision(this.player)) {
+                this.player.velY = 0;
+                console.log("AQUI");
+            }
             this.clearAll()
             this.drawAll()
 
@@ -63,22 +67,14 @@ const Game = {
     generateAll() {
         this.background = new Background(this.context, this.width, this.height);
         this.player = new Player(this.context, 10, 500, 0, 0);
-        // this.obstacles = new Obstacles(this.context, this.width - 1, 500, 250, 250)
+        this.obstacles = new Obstacles(this.context, 900, 500, 250, 250)
     },
 
     drawAll() {
         // console.log('LLEGO')
         this.background.draw();
         this.player.draw();
-        this.obstacles.forEach(el => {
-            el.draw()
-        });
-    },
-
-    generateObstacles() {
-        if (this.framesCounter % 90 === 0) {
-            this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(500, 400), this.player.height))
-        }
+        this.obstacles.draw()
     },
 
     movePlayer() {
