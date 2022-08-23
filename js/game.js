@@ -59,12 +59,14 @@ const Game = {
     generateAll() {
         this.background = new Background(this.context, this.width, this.height);
         this.player = new Player(this.context, 10, 500, 0, 0);
+        this.obstacles = new Obstacles(this.context, 900, 500, 250, 250)
     },
 
     drawAll() {
         // console.log('LLEGO')
         this.background.draw();
         this.player.draw();
+        this.obstacles.draw()
     },
 
     movePlayer() {

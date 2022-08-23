@@ -42,7 +42,7 @@ class Player {
     }
 
     jump() {
-        if (this.y >= 500) {
+        if (this.y === 500) {
             this.y -= 50
             this.velY -= 10
         }
