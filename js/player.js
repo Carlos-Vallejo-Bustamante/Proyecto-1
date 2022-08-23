@@ -42,8 +42,11 @@ class Player {
     }
 
     jump() {
-        this.y -= 50
-        this.velY -= 10
+        if (this.y >= 500) {
+            this.y -= 50
+            this.velY -= 10
+        }
+
     }
 
     gravedad() {
