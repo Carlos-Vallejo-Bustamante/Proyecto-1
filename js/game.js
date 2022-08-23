@@ -25,8 +25,8 @@ const Game = {
     },
 
     setDimensions() {
-        this.width = window.innerWidth - 10;
-        this.height = window.innerHeight - 10;
+        this.width = window.innerWidth
+        this.height = window.innerHeight
         this.canvas.width = this.width;
         this.canvas.height = this.height;
     },
@@ -41,7 +41,13 @@ const Game = {
 
             if (this.keys.keyLeftPressed) this.player.moveLeft()
             if (this.keys.keyRightPressed) this.player.moveRigth()
-            if (this.keys.keyJumpPressed) this.player.jump()
+            if (this.keys.keyJumpPressed) {
+                this.player.jump()
+                if (this.keys.keyJumpPressed) {
+                    this.keys.keyJumpPressed = false
+                }
+            }
+
             this.clearAll()
             this.drawAll()
 

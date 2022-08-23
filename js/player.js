@@ -28,16 +28,22 @@ class Player {
     }
 
     moveLeft() {
-        this.x -= 10
+        if (this.x > 10) {
+            this.x -= 10
+        }
+
     }
 
     moveRigth() {
-        this.x += 10
+        if (this.x < 600) {
+            this.x += 10
+        }
+
     }
 
     jump() {
-        this.y -= 5
-        this.velY -= 2
+        this.y -= 50
+        this.velY -= 10
     }
 
     gravedad() {
