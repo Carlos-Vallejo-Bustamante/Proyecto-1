@@ -13,7 +13,8 @@ const Game = {
 
     keys: {
         keyLeftPressed: false,
-        keyRightPressed: false
+        keyRightPressed: false,
+        keyJumpPressed: false
     },
 
     init() {
@@ -40,6 +41,7 @@ const Game = {
 
             if (this.keys.keyLeftPressed) this.player.moveLeft()
             if (this.keys.keyRightPressed) this.player.moveRigth()
+            if (this.keys.keyJumpPressed) this.player.jump()
             this.clearAll()
             this.drawAll()
 
@@ -63,11 +65,14 @@ const Game = {
         document.addEventListener('keydown', e => {
             switch (e.key) {
                 case 'ArrowLeft': // left arrow
-                    this.keys.keyLeftPressed = true;
-                    break;
+                    this.keys.keyLeftPressed = true
+                    break
                 case 'ArrowRight': // right arrow
-                    this.keys.keyRightPressed = true;
-                    break;
+                    this.keys.keyRightPressed = true
+                    break
+                case 's':
+                    this.keys.keyJumpPressed = true
+                    break
             }
             // console.log(e.key + 'DOWN')
         });
@@ -75,11 +80,14 @@ const Game = {
         document.addEventListener('keyup', e => {
             switch (e.key) {
                 case 'ArrowLeft': // left arrow
-                    this.keys.keyLeftPressed = false;
-                    break;
+                    this.keys.keyLeftPressed = false
+                    break
                 case 'ArrowRight': // right arrow
-                    this.keys.keyRightPressed = false;
-                    break;
+                    this.keys.keyRightPressed = false
+                    break
+                case 's':
+                    this.keys.keyJumpPressed = false
+                    break
             }
             // console.log(e.key + 'UP')
         });
