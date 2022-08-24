@@ -9,13 +9,15 @@ const Game = {
     // counter: 0,
     // secs: 0, 
     framesCounter: 0,
-    paralax: 10,
+    paralax: 15,
 
     background: undefined,
     player: undefined,
     obstacles: [],
+    platforms: [],
     platform: undefined,
-
+    platforms2: undefined,
+    canJump: false,
     keys: {
         keyLeftPressed: false,
         keyRightPressed: false,
@@ -37,8 +39,6 @@ const Game = {
     },
 
     start() {
-
-
         this.generateAll()
         this.movePlayer()
 
@@ -47,10 +47,13 @@ const Game = {
             // if (this.counter % 60 === 0) this.secs++
             if (this.keys.keyLeftPressed) this.player.moveLeft()
             if (this.keys.keyRightPressed) this.player.moveRigth()
-            if (this.keys.keyJumpPressed) {
+            if (this.keys.keyJumpPressed && this.canJump) {
                 this.player.jump()
                 if (this.keys.keyJumpPressed) {
-                    this.keys.keyJumpPressed = false
+                    //     this.keys.keyJumpPressed = false
+                    // }
+                    this.player.jump();
+                    this.canJump = true;
                 }
             }
 
@@ -63,7 +66,8 @@ const Game = {
             this.drawAll()
 
             this.generateObstacles()
-            this.checkCollision()
+            this.checkCollision(this.platform);
+            this.checkCollision(this.platform2);
 
             // chocado = false;
             // if (!chocado && collision) quitarVida y chocaado = true
@@ -74,7 +78,8 @@ const Game = {
 
     generateAll() {
         this.background = new Background(this.context, this.width, this.height, this.paralax);
-        this.player = new Player(this.context, 10, 500, 100, 100)
+        this.player = new Player(this.context, 10, 0, 50, 50)
+        this.platform2 = new Platform(this.context, 10, 500 + this.player.width, this.width, 100);
         // this.player = new Player(this.context, 10, 500, 100, 100);
         // this.obstacles = new Obstacles(this.context, this.width - 1, 500, 250, 250)
         this.platform = new Platform(this.context, 200, 400, 200, 50);
@@ -82,14 +87,15 @@ const Game = {
 
     drawAll() {
         if (this.keys.keyRightPressed) {
-            this.background.posX -= 40;
+            this.background.posX -= this.paralax;
         }
         this.background.draw();
         this.player.draw();
         this.platform.draw();
+        this.platform2.draw();
         this.obstacles.forEach(el => {
             if (this.keys.keyRightPressed) {
-                el.x -= 40;
+                el.x -= this.paralax;
             }
             el.draw()
         });
@@ -112,6 +118,7 @@ const Game = {
                     break
                 case 's':
                     this.keys.keyJumpPressed = true
+                    this.canJump = false;
                     break
             }
         });
@@ -126,6 +133,7 @@ const Game = {
                     break
                 case 's':
                     this.keys.keyJumpPressed = false
+                    this.canJump = false;
                     break
             }
         });
@@ -141,13 +149,16 @@ const Game = {
         return Math.floor(Math.random() * (max - min + 1) + min);
     },
 
-    checkCollision() {
-        if (this.player.y + this.player.height <= this.platform.y
-            && this.player.y + this.player.height + this.player.velY >= this.platform.y
-            && this.player.x + this.player.width > this.platform.x
-            && this.player.x < this.platform.x + this.platform.width) {
+    checkCollision(platform) {
+        if (this.player.y + this.player.height <= platform.y
+            && this.player.y + this.player.height + this.player.velY >= platform.y
+            && this.player.x + this.player.width > platform.x
+            && this.player.x < platform.x + platform.width) {
+            this.canJump = true;
+            // console.log("Salta");
             this.player.velY = 0
         }
+
 
     },
 
@@ -156,7 +167,8 @@ const Game = {
             this.player.x + this.player.width > obstacle.x &&
             this.player.y < obstacle.y + obstacle.height &&
             this.player.y + this.player.height > obstacle.y) {
-            console.log("Choque");
+            // console.log("Choque");
+            // TODO: perder vida
         }
     }
 
