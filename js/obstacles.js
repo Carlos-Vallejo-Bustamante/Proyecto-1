@@ -10,6 +10,7 @@ class Obstacle {
         this.enemy.src = './js/images/enemy1.png'
 
         this.velX = 5
+        this.chocado = false;
 
     }
 

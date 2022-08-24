@@ -1,11 +1,19 @@
-* {
+/* * {
     margin: 0;
     padding: 0;
-}
+} */
+
+/* Utility classes */
+
+/* .absolute {
+    position: absolute;
+} */
 
 body {
     overflow: hidden;
     position: relative;
+    margin: 0;
+    padding: 0;
 }
 
 #canvas {
@@ -15,8 +23,29 @@ body {
 }
 
 .score {
+    color: #fff;
     position: absolute;
     margin-left: 50px;
     margin-top: 50px;
+}
 
+.life1 {
+    position: absolute;
+    width: 50px;
+    margin-left: 10px;
+    margin-top: 90px;
+}
+
+.life2 {
+    position: absolute;
+    width: 50px;
+    margin-left: 70px;
+    margin-top: 90px;
+}
+
+.life3 {
+    position: absolute;
+    width: 50px;
+    margin-left: 130px;
+    margin-top: 90px;
 }

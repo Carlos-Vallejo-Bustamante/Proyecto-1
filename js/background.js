@@ -1,5 +1,5 @@
 class Background {
-    constructor(context, w, h, parallax) {
+    constructor(context, w, h) {
         this.context = context
         this.width = w
         this.height = h
@@ -15,7 +15,6 @@ class Background {
     }
 
     draw() {
-
         this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);
         this.context.drawImage(this.image, this.posX + canvas.width, this.posY, this.width, this.height)
 

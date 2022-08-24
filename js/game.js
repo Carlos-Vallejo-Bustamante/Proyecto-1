@@ -5,9 +5,14 @@ const Game = {
     height: undefined,
     intervaId: undefined,
     fps: 60,
-    time: document.querySelector('.score'),
-    // counter: 0,
-    // secs: 0, 
+
+    time: undefined,
+    counter: 0,
+    secs: 0,
+
+    lifes: undefined,
+    life: undefined,
+
     framesCounter: 0,
     paralax: 15,
 
@@ -41,10 +46,22 @@ const Game = {
     start() {
         this.generateAll()
         this.movePlayer()
+        this.lifes = document.querySelector('.lifes');
+
+        for (let i = 1; i < 4; i++) {
+            this.life = document.createElement("img")
+            this.life.src = './js/images/life-sonic.png'
+            this.life.setAttribute('class', 'life' + i)
+
+            this.lifes.appendChild(this.life)
+        }
 
         this.intervaId = setInterval(() => {
-            // this.counter++
-            // if (this.counter % 60 === 0) this.secs++
+
+            this.time = document.querySelector(".score").innerHTML = `Score - ${this.secs}`
+            this.counter++
+            if (this.counter % 60 === 0) this.secs++
+
             if (this.keys.keyLeftPressed) this.player.moveLeft()
             if (this.keys.keyRightPressed) this.player.moveRigth()
             if (this.keys.keyJumpPressed && this.canJump) {
@@ -57,9 +74,7 @@ const Game = {
                 }
             }
 
-            this.obstacles.forEach(o => {
-                this.checkCollisionObstacles(o);
-            });
+            this.obstacles.forEach(obstacle => this.checkCollisionObstacles(obstacle));
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
 
             this.clearAll()
@@ -69,6 +84,8 @@ const Game = {
             this.checkCollision(this.platform);
             this.checkCollision(this.platform2);
 
+            this.gameOver();
+
             // chocado = false;
             // if (!chocado && collision) quitarVida y chocaado = true
 
@@ -77,7 +94,7 @@ const Game = {
     },
 
     generateAll() {
-        this.background = new Background(this.context, this.width, this.height, this.paralax);
+        this.background = new Background(this.context, this.width, this.height);
         this.player = new Player(this.context, 10, 0, 50, 50)
         this.platform2 = new Platform(this.context, 10, 500 + this.player.width, this.width, 100);
         // this.player = new Player(this.context, 10, 500, 100, 100);
@@ -93,27 +110,25 @@ const Game = {
         this.player.draw();
         this.platform.draw();
         this.platform2.draw();
-        this.obstacles.forEach(el => {
-            if (this.keys.keyRightPressed) {
-                el.x -= this.paralax;
-            }
-            el.draw()
+        this.obstacles.forEach(obstacle => {
+            if (this.keys.keyRightPressed) obstacle.x -= this.paralax;
+            obstacle.draw()
         });
     },
 
     generateObstacles() {
         if (this.framesCounter % 90 === 0) {
-            this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(500, 250), 60, 60))
+            this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(500, 150), 60, 60))
         }
     },
 
     movePlayer() {
         document.addEventListener('keydown', e => {
             switch (e.key) {
-                case 'ArrowLeft': // left arrow
+                case 'ArrowLeft':
                     this.keys.keyLeftPressed = true
                     break
-                case 'ArrowRight': // right arrow
+                case 'ArrowRight':
                     this.keys.keyRightPressed = true
                     break
                 case 's':
@@ -125,10 +140,10 @@ const Game = {
 
         document.addEventListener('keyup', e => {
             switch (e.key) {
-                case 'ArrowLeft': // left arrow
+                case 'ArrowLeft':
                     this.keys.keyLeftPressed = false
                     break
-                case 'ArrowRight': // right arrow
+                case 'ArrowRight':
                     this.keys.keyRightPressed = false
                     break
                 case 's':
@@ -158,18 +173,26 @@ const Game = {
             // console.log("Salta");
             this.player.velY = 0
         }
-
-
     },
 
     checkCollisionObstacles(obstacle) {
         if (this.player.x < obstacle.x + obstacle.width &&
             this.player.x + this.player.width > obstacle.x &&
             this.player.y < obstacle.y + obstacle.height &&
-            this.player.y + this.player.height > obstacle.y) {
-            // console.log("Choque");
+            this.player.y + this.player.height > obstacle.y &&
+            !obstacle.chocado) {
+            console.log("Choque");
             // TODO: perder vida
+
+            const life1 = document.querySelector(`.life${this.player.hp}`)
+            this.player.hp--;
+            this.lifes.removeChild(life1)
+            obstacle.chocado = true;
         }
+    },
+
+    gameOver() {
+        if (this.player.hp === 0) this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     }
 
 }

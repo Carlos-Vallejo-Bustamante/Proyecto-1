@@ -3,7 +3,7 @@ class Player {
         this.context = context
         this.x = x
         this.y = y
-        // this.hp = hp
+        this.hp = 3
         // this.score = score
         this.width = width
         this.height = height
@@ -12,14 +12,14 @@ class Player {
         this.velY = 1;
         this.gravity = 0.3;
 
-        this.sonic = new Image();
-        this.sonic.src = './js/images/sonic1.png';
-
+        this.sonic = new Image()
+        this.sonic.src = './js/images/sonic1.png'
     }
 
     draw() {
 
         // this.sonic.addEventListener("load", () => {
+
         this.context.fillRect(this.x, this.y, this.width, this.height)
         // this.context.drawImage(this.sonic, this.x, this.y, this.width, this.height)
         this.gravedad()
