@@ -15,8 +15,8 @@ class Obstacle {
     }
 
     draw() {
-        this.context.drawImage(this.enemy, this.x, this.y, this.width, this.height)
-        this.move()
+        this.context.drawImage(this.enemy, this.x, this.y, this.width, this.height);
+        this.move();
     }
 
     move() {

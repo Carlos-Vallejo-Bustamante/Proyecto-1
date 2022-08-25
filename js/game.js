@@ -18,6 +18,7 @@ const Game = {
     finalScreen: undefined,
 
     framesCounter: 0,
+    numberFrames: 40,
     paralax: 15,
 
     background: undefined,
@@ -25,7 +26,7 @@ const Game = {
     obstacles: [],
     platforms: [],
     platform: undefined,
-    platforms2: undefined,
+    platform2: undefined,
     canJump: false,
     keys: {
         keyLeftPressed: false,
@@ -62,6 +63,8 @@ const Game = {
 
         this.intervaId = setInterval(() => {
 
+            console.log(this.player.velY)
+
             this.time = document.querySelector(".score").innerHTML = `Score : ${this.secs}`
             this.counter++
             if (this.counter % 60 === 0) this.secs++
@@ -85,8 +88,12 @@ const Game = {
             this.drawAll()
 
             this.generateObstacles()
-            this.checkCollision(this.platform);
-            this.checkCollision(this.platform2);
+            this.generatePlatforms()
+            this.platforms.forEach((platform) =>
+                this.checkCollisionPlatform(platform)
+            );
+            // this.checkCollisionPlatform(this.platform);
+            this.checkCollisionPlatform(this.platform2);
 
             this.gameOver();
 
@@ -99,7 +106,7 @@ const Game = {
 
     generateAll() {
         this.background = new Background(this.context, this.width, this.height);
-        this.player = new Player(this.context, 10, 0, 50, 50)
+        this.player = new Player(this.context, 10, 0, 100, 100)
         this.platform2 = new Platform(this.context, 0, 525 + this.player.width, this.width, 100, 0.3);
         // this.player = new Player(this.context, 10, 500, 100, 100);
         // this.obstacles = new Obstacles(this.context, this.width - 1, 500, 250, 250)
@@ -113,22 +120,44 @@ const Game = {
         }
         this.background.draw();
         this.player.draw(this.framesCounter);
-        this.platform.draw();
+        // this.platform.draw();
         this.context.globalAlpha = 0;
         this.platform2.draw();
         this.context.globalAlpha = 1;
+        this.platforms.forEach((platform) => {
+            if (this.keys.keyRightPressed) platform.x -= this.paralax;
+            platform.draw();
+        });
         this.obstacles.forEach(obstacle => {
             if (this.keys.keyRightPressed) obstacle.x -= this.paralax;
             obstacle.draw()
         });
+
     },
 
     generateObstacles() {
-        if (this.framesCounter % 40 === 0) {
-            this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(500, 150), 60, 60))
+
+        if (this.secs === 20) this.numberFrames = 30
+        if (this.secs === 40) this.numberFrames = 20
+        if (this.secs === 60) this.numberFrames = 10
+
+        if (this.framesCounter % this.numberFrames === 0) {
+            this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(550, 150), 70, 70))
         }
     },
-
+    generatePlatforms() {
+        if (this.framesCounter % 50 === 0) {
+            this.platforms.push(
+                new Platform(
+                    this.context,
+                    this.width,
+                    this.getRandomIntInclusive(500, 150),
+                    200,
+                    20
+                )
+            );
+        }
+    },
     movePlayer() {
         document.addEventListener('keydown', e => {
             switch (e.key) {
@@ -137,7 +166,6 @@ const Game = {
                     break
                 case 'ArrowRight':
                     this.keys.keyRightPressed = true
-
                     break
                 case 's':
                     this.keys.keyJumpPressed = true
@@ -158,6 +186,7 @@ const Game = {
                 case 's':
                     this.keys.keyJumpPressed = false
                     this.canJump = false;
+                    this.player.audioJump.pause()
                     break
             }
         });
@@ -173,7 +202,7 @@ const Game = {
         return Math.floor(Math.random() * (max - min + 1) + min);
     },
 
-    checkCollision(platform) {
+    checkCollisionPlatform(platform) {
         if (this.player.y + this.player.height <= platform.y
             && this.player.y + this.player.height + this.player.velY >= platform.y
             && this.player.x + this.player.width > platform.x

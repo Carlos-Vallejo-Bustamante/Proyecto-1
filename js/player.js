@@ -77,7 +77,6 @@ class Player {
             this.y -= 100
             this.velY -= 10
         }
-
     }
 
 

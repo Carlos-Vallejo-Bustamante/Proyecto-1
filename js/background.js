@@ -17,9 +17,7 @@ class Background {
     draw() {
         this.context.drawImage(this.image, this.posX, this.posY, this.width, this.height);
         this.context.drawImage(this.image, this.posX + canvas.width, this.posY, this.width, this.height)
-
-        // this.image.src = this.image.src;
-        // this.context.drawImage(this.image, this.posX + this.width, this.posY, this.width, this.height);
+        this.context.drawImage(this.image, this.posX + canvas.width + canvas.width, this.posY, this.width, this.height)
         this.move()
     }
 
