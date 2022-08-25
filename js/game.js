@@ -6,12 +6,16 @@ const Game = {
     intervaId: undefined,
     fps: 60,
 
+    audio: undefined,
+
     time: undefined,
     counter: 0,
     secs: 0,
 
     lifes: undefined,
     life: undefined,
+
+    finalScreen: undefined,
 
     framesCounter: 0,
     paralax: 15,
@@ -58,7 +62,7 @@ const Game = {
 
         this.intervaId = setInterval(() => {
 
-            this.time = document.querySelector(".score").innerHTML = `Score - ${this.secs}`
+            this.time = document.querySelector(".score").innerHTML = `Score : ${this.secs}`
             this.counter++
             if (this.counter % 60 === 0) this.secs++
 
@@ -96,20 +100,23 @@ const Game = {
     generateAll() {
         this.background = new Background(this.context, this.width, this.height);
         this.player = new Player(this.context, 10, 0, 50, 50)
-        this.platform2 = new Platform(this.context, 10, 500 + this.player.width, this.width, 100);
+        this.platform2 = new Platform(this.context, 0, 525 + this.player.width, this.width, 100, 0.3);
         // this.player = new Player(this.context, 10, 500, 100, 100);
         // this.obstacles = new Obstacles(this.context, this.width - 1, 500, 250, 250)
-        this.platform = new Platform(this.context, 200, 400, 200, 50);
+        this.platform = new Platform(this.context, 200, 400, 200, 20);
     },
 
     drawAll() {
+        this.player.audio.play()
         if (this.keys.keyRightPressed) {
             this.background.posX -= this.paralax;
         }
         this.background.draw();
-        this.player.draw();
+        this.player.draw(this.framesCounter);
         this.platform.draw();
+        this.context.globalAlpha = 0;
         this.platform2.draw();
+        this.context.globalAlpha = 1;
         this.obstacles.forEach(obstacle => {
             if (this.keys.keyRightPressed) obstacle.x -= this.paralax;
             obstacle.draw()
@@ -117,7 +124,7 @@ const Game = {
     },
 
     generateObstacles() {
-        if (this.framesCounter % 90 === 0) {
+        if (this.framesCounter % 40 === 0) {
             this.obstacles.push(new Obstacle(this.context, this.width, this.getRandomIntInclusive(500, 150), 60, 60))
         }
     },
@@ -130,10 +137,12 @@ const Game = {
                     break
                 case 'ArrowRight':
                     this.keys.keyRightPressed = true
+
                     break
                 case 's':
                     this.keys.keyJumpPressed = true
                     this.canJump = false;
+                    this.player.audioJump.play()
                     break
             }
         });
@@ -192,7 +201,17 @@ const Game = {
     },
 
     gameOver() {
-        if (this.player.hp === 0) this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    }
 
+        this.finalScreen = new Image()
+        this.finalScreen.src = './js/images/game-over.webp'
+
+        if (this.player.hp === 0) {
+            clearInterval(this.intervaId)
+            this.clearAll()
+            this.context.drawImage(this.finalScreen, 0, 0, this.width, this.height)
+            this.player.audio.pause()
+            this.player.audioGameOver.play()
+        }
+
+    }
 }

@@ -7,25 +7,55 @@ class Player {
         // this.score = score
         this.width = width
         this.height = height
-        this.posY0 = 500
+        this.posY0 = 600
 
         this.velY = 1;
         this.gravity = 0.3;
 
+        this.image = new Image();
+        this.image.src = "./js/images/sonic-prueba.png";
+        this.image.frames = 3;
+        this.image.framesIndex = 0;
+
         this.sonic = new Image()
         this.sonic.src = './js/images/sonic1.png'
+
+        this.audio = new Audio()
+        this.audio.src = "./js/images/sonic-gumball.mp3"
+
+        this.audioGameOver = new Audio()
+        this.audioGameOver.src = "./js/images/sonic-game-over.mp3"
+
+        this.audioJump = new Audio()
+        this.audioJump.src = "./js/images/jump.mp3"
     }
 
-    draw() {
+    draw(framesCounter) {
+        this.context.drawImage(
+            this.image,
+            this.image.framesIndex * (this.image.width / this.image.frames),
+            0,
+            this.image.width / this.image.frames,
+            this.image.height,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+        );
+        this.animate(framesCounter);
+        this.gravedad();
 
-        // this.sonic.addEventListener("load", () => {
+        // this.context.fillRect(this.x, this.y, this.width, this.height);
+        // this.gravedad();
+    }
 
-        this.context.fillRect(this.x, this.y, this.width, this.height)
-        // this.context.drawImage(this.sonic, this.x, this.y, this.width, this.height)
-        this.gravedad()
-        // });
-
-
+    animate(framesCounter) {
+        if (framesCounter % 5 == 0) {
+            this.image.framesIndex++;
+        }
+        if (this.image.framesIndex >= this.image.frames) {
+            this.image.framesIndex = 0;
+        }
     }
 
     moveLeft() {
