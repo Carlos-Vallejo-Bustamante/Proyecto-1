@@ -18,7 +18,7 @@ const Game = {
     finalScreen: undefined,
 
     framesCounter: 0,
-    numberFrames: 40,
+    numberFrames: 60,
     paralax: 15,
 
     background: undefined,
@@ -114,6 +114,7 @@ const Game = {
     },
 
     drawAll() {
+
         this.player.audio.play()
         if (this.keys.keyRightPressed) {
             this.background.posX -= this.paralax;
@@ -146,7 +147,7 @@ const Game = {
         }
     },
     generatePlatforms() {
-        if (this.framesCounter % 50 === 0) {
+        if (this.framesCounter % 80 === 0) {
             this.platforms.push(
                 new Platform(
                     this.context,
@@ -208,7 +209,6 @@ const Game = {
             && this.player.x + this.player.width > platform.x
             && this.player.x < platform.x + platform.width) {
             this.canJump = true;
-            // console.log("Salta");
             this.player.velY = 0
         }
     },
@@ -219,13 +219,11 @@ const Game = {
             this.player.y < obstacle.y + obstacle.height &&
             this.player.y + this.player.height > obstacle.y &&
             !obstacle.chocado) {
-            console.log("Choque");
-            // TODO: perder vida
-
             const life1 = document.querySelector(`.life${this.player.hp}`)
             this.player.hp--;
             this.lifes.removeChild(life1)
             obstacle.chocado = true;
+            this.player.punch.play()
         }
     },
 

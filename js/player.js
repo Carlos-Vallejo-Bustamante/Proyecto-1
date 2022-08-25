@@ -28,6 +28,9 @@ class Player {
 
         this.audioJump = new Audio()
         this.audioJump.src = "./js/images/jump.mp3"
+
+        this.punch = new Audio()
+        this.punch.src = "./js/images/sfx-punch12.mp3"
     }
 
     draw(framesCounter) {
